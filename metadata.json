@@ -1,0 +1,6 @@
+{
+  "name": "Meadow - Corporate Platform & Secure Management Portal",
+  "description": "Professional Meadow company web portal featuring real-time Firebase dynamic content management, interactive team showcases, secure career applications, and role-based admin access control.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

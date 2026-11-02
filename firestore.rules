@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isWhitelistedAdminEmail() {
+      return isSignedIn() &&
+        request.auth.token.email != null &&
+        (request.auth.token.email.lower() == 'shekhor.mmc@gmail.com' ||
+         request.auth.token.email.lower() == 'durjoysharma1234@gmail.com');
+    }
+
+    function isAdmin() {
+      return isWhitelistedAdminEmail() ||
+        (isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Site content and configuration
+    match /site/{docId} {
+      allow get, list: if true;
+      allow write: if isAdmin() && isValidId(docId);
+    }
+
+    // Employees
+    match /employees/{employeeId} {
+      allow get, list: if true;
+      allow write: if isAdmin() && isValidId(employeeId);
+    }
+
+    // Media assets
+    match /media/{mediaId} {
+      allow get, list: if true;
+      allow write: if isAdmin() && isValidId(mediaId);
+    }
+
+    // Job Applications
+    match /applications/{appId} {
+      allow create: if isValidId(appId) &&
+        request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 120 &&
+        request.resource.data.email is string && request.resource.data.email.size() > 0 && request.resource.data.email.size() <= 120 &&
+        request.resource.data.phone is string && request.resource.data.phone.size() > 0 && request.resource.data.phone.size() <= 50 &&
+        request.resource.data.position is string && request.resource.data.position.size() > 0 && request.resource.data.position.size() <= 100;
+      allow get, list, update, delete: if isAdmin() && isValidId(appId);
+    }
+
+    // Admins registry
+    match /admins/{adminId} {
+      allow read, write: if isAdmin() && isValidId(adminId);
+    }
+  }
+}

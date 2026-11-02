@@ -1,0 +1,199 @@
+{
+  "entities": {
+    "SiteContent": {
+      "title": "SiteContent",
+      "description": "Dynamic editable site configuration, landing pages, about text, and contact channels",
+      "type": "object",
+      "properties": {
+        "site": {
+          "type": "object",
+          "description": "Site wide settings including tagline and footer text"
+        },
+        "home": {
+          "type": "object",
+          "description": "Home hero slides and floating card menus"
+        },
+        "about": {
+          "type": "object",
+          "description": "About page details and narrative sections"
+        },
+        "contact": {
+          "type": "object",
+          "description": "Official contact channels"
+        },
+        "apply": {
+          "type": "object",
+          "description": "Job application configuration and channels"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp of last update"
+        }
+      }
+    },
+    "Employee": {
+      "title": "Employee",
+      "description": "Team member profile displayed in dynamic interactive carousel and member details",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the employee"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the employee"
+        },
+        "role": {
+          "type": "string",
+          "description": "Designation or title"
+        },
+        "dept": {
+          "type": "string",
+          "description": "Department or division"
+        },
+        "photo": {
+          "type": "string",
+          "description": "Profile photo URL or optimized base64 payload"
+        },
+        "bio": {
+          "type": "string",
+          "description": "Short introductory biography"
+        },
+        "about": {
+          "type": "array",
+          "description": "List of highlights, duties, and qualifications"
+        },
+        "contact": {
+          "type": "array",
+          "description": "List of direct contact channels"
+        },
+        "order": {
+          "type": "number",
+          "description": "Display order index in carousel"
+        }
+      },
+      "required": ["id", "name", "role"]
+    },
+    "Media": {
+      "title": "Media",
+      "description": "Optimized image and media asset storage for site sections and banners",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Media section or asset key"
+        },
+        "data": {
+          "type": "string",
+          "description": "Optimized data URL or image source"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last updated timestamp"
+        }
+      },
+      "required": ["id", "data"]
+    },
+    "Application": {
+      "title": "Application",
+      "description": "Job and career candidate application submission",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique application reference code"
+        },
+        "name": {
+          "type": "string",
+          "description": "Candidate full name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Candidate email address"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Candidate telephone number"
+        },
+        "position": {
+          "type": "string",
+          "description": "Applied position title"
+        },
+        "city": {
+          "type": "string",
+          "description": "City or location"
+        },
+        "education": {
+          "type": "string",
+          "description": "Educational background"
+        },
+        "experience": {
+          "type": "string",
+          "description": "Years of experience"
+        },
+        "cv": {
+          "type": "string",
+          "description": "CV or portfolio link"
+        },
+        "note": {
+          "type": "string",
+          "description": "Applicant cover note"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["New", "Reviewing", "Shortlisted", "Rejected"],
+          "description": "Application review status"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO submission timestamp"
+        }
+      },
+      "required": ["id", "name", "email", "phone", "position"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Whitelisted administrator credentials and permissions",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Authorized admin email address"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "superadmin"],
+          "description": "Access role level"
+        },
+        "addedAt": {
+          "type": "string",
+          "description": "Authorized date timestamp"
+        }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/site/{docId}": {
+      "schema": "SiteContent",
+      "description": "Global website configuration, text content, and navigation points"
+    },
+    "/employees/{employeeId}": {
+      "schema": "Employee",
+      "description": "Team members list and details for carousel and dedicated employee tabs"
+    },
+    "/media/{mediaId}": {
+      "schema": "Media",
+      "description": "Image banners and visual elements for site sections"
+    },
+    "/applications/{appId}": {
+      "schema": "Application",
+      "description": "Career applicant submissions"
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminUser",
+      "description": "Authorized admin records for strict RBAC"
+    }
+  }
+}
